@@ -1,0 +1,72 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`BookingCard (snapshot) > matches snapshot for a sample booking 1`] = `
+<div>
+  <div
+    class="sc-beySbL eLxIX"
+    data-testid="booking-card-10"
+  >
+    <div
+      class="sc-guDLRU hIDheN"
+    >
+      <div
+        class="sc-dmyDGl bksOVr"
+      >
+        <h3
+          class="sc-hLQRIK iuIgfJ"
+        >
+          Cozy Apartment Downtown
+        </h3>
+        <span
+          class="sc-eDLJxb usymJ"
+        >
+          apartment
+        </span>
+      </div>
+    </div>
+    <div
+      class="sc-jTQDnk kgBzCr"
+    >
+      <strong>
+        Dates:
+      </strong>
+       
+      Jan 9, 2025 - Jan 11, 2025
+    </div>
+    <div
+      class="sc-gLLvbB bcChzU"
+    >
+      <div>
+        <strong>
+          Guest:
+        </strong>
+         
+        John Doe
+      </div>
+      <div>
+        <strong>
+          Email:
+        </strong>
+         
+        john@example.com
+      </div>
+    </div>
+    <div
+      class="sc-iBdmCa eKlbkY"
+    >
+      <button
+        class="sc-fsYeqr hKyOnZ"
+        variant="primary"
+      >
+        Edit
+      </button>
+      <button
+        class="sc-fsYeqr bzVIiG"
+        variant="danger"
+      >
+        Delete
+      </button>
+    </div>
+  </div>
+</div>
+`;

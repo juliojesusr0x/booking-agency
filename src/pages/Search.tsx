@@ -1,11 +1,10 @@
 import React, { useMemo, useState } from "react";
 import styled from "styled-components";
 import { PropertyCard } from "@/components/PropertyCard";
-import { useSelector } from "react-redux";
-import type { RootState } from "@/store";
 import type { Property } from "@/types";
 import { EmptyState } from "@/components/EmptyState";
 import { Link } from "react-router-dom";
+import { useAppSelector } from "@/hooks/useAppDispatch";
 
 const SearchContainer = styled.div`
   max-width: 1200px;
@@ -58,9 +57,7 @@ const PropertiesGrid = styled.div`
 `;
 
 export const Search: React.FC = () => {
-  const properties = useSelector(
-    (state: RootState) => state.properties.properties,
-  );
+  const { properties } = useAppSelector((state) => state.properties);
 
   const [searchValue, setSearchValue] = useState<string>("");
 
