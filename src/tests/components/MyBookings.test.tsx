@@ -150,7 +150,6 @@ describe("MyBookings page", () => {
     mockState.bookings.bookings = [
       {
         id: 10,
-        propertyId: 1,
         startDate: "2025-01-10",
         endDate: "2025-01-12",
         guestName: "John Doe",

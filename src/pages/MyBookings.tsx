@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { useAppDispatch, useAppSelector } from "@/hooks/useAppDispatch";
 import { BookingCard } from "@/components/BookingCard";
-import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { EmptyState } from "@/components/EmptyState";
 import { ConfirmDialog } from "@/components/ConfirmDialog";
 import { setBookings } from "@/store/bookings/BookingsSlice";
