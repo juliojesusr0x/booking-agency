@@ -1,73 +1,90 @@
-# React + TypeScript + Vite
+# Booking Agency
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A React-based booking management application that allows users to create, read, update, and delete bookings for properties.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- ✅ CRUD operations for bookings
+- ✅ Property search and listing
+- ✅ Date range selection
+- ✅ Overlap prevention for bookings
+- ✅ Responsive design (mobile, tablet, desktop)
+- ✅ Form validation
+- ✅ Error handling
 
-## React Compiler
+## Tech Stack
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **React 18** with TypeScript
+- **Vite** - Build tool
+- **React Router v6** - Routing
+- **Redux Toolkit** - State management
+- **Tailwind CSS** - Styling
+- **Styled Components** - Component styling
+- **Vitest** - Unit testing
 
-## Expanding the ESLint configuration
+## Getting Started
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### Prerequisites
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+- Node.js 18+ and npm
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+### Installation
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### Development
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm run dev
 ```
+
+The app will be available at `http://localhost:5173`
+
+### Build
+
+```bash
+npm run build
+```
+
+### Preview Production Build
+
+```bash
+npm run preview
+```
+
+## Testing
+
+### Unit Tests
+
+```bash
+npm test
+```
+
+## Project Structure
+
+```
+src/
+├── db/           # fake initial db values
+├── store/        # Redux store and slices
+├── pages/        # Page components
+├── components/   # Reusable components
+├── hooks/        # Custom hooks
+├── utils/        # Utility functions
+├── types/        # TypeScript types
+└── tests/        # Test setup
+```
+
+## Pages
+
+- **Homepage (Search)** - `/` - Search properties by date range
+- **Property Details** - `/property/:id` - View property and create booking
+- **Edit Booking** - `/property/:id/booking/:bookingId` - Edit existing booking
+- **My Bookings** - `/bookings` - View and manage all bookings
+
+## Notes
+
+- All bookings are validated for overlaps
+- Dates cannot be in the past
+- At least 1 night stay is required
