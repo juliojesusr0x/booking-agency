@@ -17,7 +17,6 @@ type Property = {
 
 type Booking = {
   id: number;
-  propertyId: number;
   startDate: string;
   endDate: string;
   guestName: string;
@@ -92,16 +91,14 @@ describe("MyBookings page", () => {
 
     mockState.bookings.bookings = [
       {
-        id: 10,
-        propertyId: 1,
+        id: 1,
         startDate: "2025-01-10",
         endDate: "2025-01-12",
         guestName: "John Doe",
         guestEmail: "john@example.com",
       },
       {
-        id: 11,
-        propertyId: 2,
+        id: 2,
         startDate: "2025-02-01",
         endDate: "2025-02-05",
         guestName: "Jane Smith",

@@ -4,15 +4,11 @@ import App from "./App";
 import "./index.css";
 import { Provider } from "react-redux";
 import { store } from "./store";
-import { initDb } from "@/db/fakeDb";
 
-// Initialize database before rendering app
-initDb().then(() => {
-  createRoot(document.getElementById("root")!).render(
-    <StrictMode>
-      <Provider store={store}>
-        <App />
-      </Provider>
-    </StrictMode>,
-  );
-});
+createRoot(document.getElementById("root")!).render(
+  <StrictMode>
+    <Provider store={store}>
+      <App />
+    </Provider>
+  </StrictMode>,
+);

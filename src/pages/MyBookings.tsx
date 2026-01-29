@@ -118,7 +118,7 @@ export const MyBookings: React.FC = () => {
         <BookingsGrid>
           {bookings.map((booking) => {
             const property = properties.find(
-              (p) => p.id === booking.propertyId,
+              (p) => Number(p.id) === Number(booking.id),
             );
             return (
               <BookingCard
