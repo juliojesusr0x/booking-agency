@@ -1,11 +1,9 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import styled from "styled-components";
 import { PropertyCard } from "@/components/PropertyCard";
-import { useDispatch, useSelector } from "react-redux";
-import type { AppDispatch, RootState } from "@/store";
+import { useSelector } from "react-redux";
+import type { RootState } from "@/store";
 import type { Property } from "@/types";
-import { setProperties } from "@/store/properties/PropertySlice";
-import { getProperties } from "@/db/fakeDb";
 import { EmptyState } from "@/components/EmptyState";
 import { Link } from "react-router-dom";
 
@@ -63,13 +61,8 @@ export const Search: React.FC = () => {
   const properties = useSelector(
     (state: RootState) => state.properties.properties,
   );
-  const dispatch = useDispatch<AppDispatch>();
 
   const [searchValue, setSearchValue] = useState<string>("");
-
-  useEffect(() => {
-    dispatch(setProperties(getProperties()));
-  }, [dispatch]);
 
   const filteredProperties = useMemo(() => {
     const q = searchValue.trim().toLowerCase();

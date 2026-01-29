@@ -1,5 +1,5 @@
-import React from "react";
-import { Link, NavLink } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, NavLink, useLocation } from "react-router-dom";
 import styled from "styled-components";
 
 const Nav = styled.nav`
@@ -41,6 +41,65 @@ const NavLinks = styled.div`
   display: flex;
   gap: 2rem;
   align-items: center;
+
+  /* Hide desktop links on small screens */
+  @media (max-width: 640px) {
+    display: none;
+  }
+`;
+
+const MobileMenuButton = styled.button`
+  display: none;
+  background: none;
+  border: none;
+  padding: 0.25rem;
+  margin-left: 1rem;
+  cursor: pointer;
+
+  @media (max-width: 640px) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  span {
+    display: block;
+    width: 1.5rem;
+    height: 0.125rem;
+    background-color: #4b5563;
+    border-radius: 9999px;
+    position: relative;
+  }
+
+  span::before,
+  span::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    width: 1.5rem;
+    height: 0.125rem;
+    background-color: #4b5563;
+    border-radius: 9999px;
+  }
+
+  span::before {
+    top: -0.35rem;
+  }
+
+  span::after {
+    top: 0.35rem;
+  }
+`;
+
+const MobileNavLinks = styled.div<{ $open: boolean }>`
+  display: none;
+
+  @media (max-width: 640px) {
+    display: ${(props) => (props.$open ? "flex" : "none")};
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-top: 0.75rem;
+  }
 `;
 
 const StyledLink = styled(NavLink)<{ $active: boolean }>`
@@ -58,6 +117,9 @@ const StyledLink = styled(NavLink)<{ $active: boolean }>`
 `;
 
 export const Navigation: React.FC = () => {
+  const { pathname } = useLocation();
+  const [isMobileOpen, setIsMobileOpen] = useState(false);
+
   return (
     <Nav>
       <NavContainer>
@@ -65,18 +127,39 @@ export const Navigation: React.FC = () => {
           <LogoImage src="/logo.svg" alt="Booking Agency" />
           <span>Booking Agency</span>
         </LogoLink>
+        <MobileMenuButton
+          type="button"
+          aria-label="Toggle navigation menu"
+          aria-expanded={isMobileOpen}
+          onClick={() => setIsMobileOpen((open) => !open)}
+        >
+          <span />
+        </MobileMenuButton>
         <NavLinks>
-          <StyledLink to="/" $active={location.pathname === "/"}>
+          <StyledLink to="/" $active={pathname === "/"}>
             Search Properties
           </StyledLink>
-          <StyledLink
-            to="/bookings"
-            $active={location.pathname === "/bookings"}
-          >
+          <StyledLink to="/bookings" $active={pathname === "/bookings"}>
             My Bookings
           </StyledLink>
         </NavLinks>
       </NavContainer>
+      <MobileNavLinks $open={isMobileOpen}>
+        <StyledLink
+          to="/"
+          $active={pathname === "/"}
+          onClick={() => setIsMobileOpen(false)}
+        >
+          Search Properties
+        </StyledLink>
+        <StyledLink
+          to="/bookings"
+          $active={pathname === "/bookings"}
+          onClick={() => setIsMobileOpen(false)}
+        >
+          My Bookings
+        </StyledLink>
+      </MobileNavLinks>
     </Nav>
   );
 };

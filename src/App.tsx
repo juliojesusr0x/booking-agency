@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Navigation } from "./components/Navigation";
 import { Search } from "./pages/Search";
@@ -6,6 +6,11 @@ import { PlaceDetails } from "./pages/PlaceDetails";
 import { MyBookings } from "./pages/MyBookings";
 import { NotFound } from "./pages/NotFound";
 import styled from "styled-components";
+import initialDb from "./db/initialDb";
+import { setProperties } from "./store/properties/PropertySlice";
+import type { Property, Booking } from "./types";
+import { setBookings } from "./store/bookings/BookingsSlice";
+import { useAppDispatch } from "./hooks/useAppDispatch";
 
 const AppContainer = styled.div`
   min-height: 100vh;
@@ -13,6 +18,13 @@ const AppContainer = styled.div`
 `;
 
 const App: React.FC = () => {
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(setProperties(initialDb.properties as Property[]));
+    dispatch(setBookings(initialDb.bookings as Booking[]));
+  }, [dispatch]);
+
   return (
     <BrowserRouter>
       <AppContainer>

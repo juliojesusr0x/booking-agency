@@ -1,6 +1,7 @@
 import type { Booking } from "@/types";
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
+import { validateBookingOverlap } from "./utils";
 
 interface BookingsState {
   bookings: Booking[];
@@ -17,16 +18,21 @@ const bookingsSlice = createSlice({
     setBookings: (state: BookingsState, action: PayloadAction<Booking[]>) => {
       state.bookings = action.payload;
     },
-    addBooking: (state: BookingsState, action: PayloadAction<Booking>) => {
+    createBooking: (state: BookingsState, action: PayloadAction<Booking>) => {
+      validateBookingOverlap(state.bookings, action.payload);
       state.bookings.push(action.payload);
     },
     updateBooking: (state: BookingsState, action: PayloadAction<Booking>) => {
+      validateBookingOverlap(state.bookings, action.payload, action.payload.id);
       const { id, ...updatedBooking } = action.payload;
       state.bookings = state.bookings.map((booking) =>
         booking.id === id ? { ...booking, ...updatedBooking } : booking,
       );
     },
-    deleteBooking: (state: BookingsState, action: PayloadAction<number>) => {
+    deleteBooking: (
+      state: BookingsState,
+      action: PayloadAction<string | number>,
+    ) => {
       state.bookings = state.bookings.filter(
         (booking) => booking.id !== action.payload,
       );
@@ -34,6 +40,6 @@ const bookingsSlice = createSlice({
   },
 });
 
-export const { setBookings, addBooking, updateBooking, deleteBooking } =
+export const { setBookings, createBooking, updateBooking, deleteBooking } =
   bookingsSlice.actions;
 export default bookingsSlice.reducer;

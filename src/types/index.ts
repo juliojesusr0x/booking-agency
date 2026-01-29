@@ -1,4 +1,4 @@
-export type PropertyType = 'apartment' | 'house' | 'chalet';
+export type PropertyType = "apartment" | "house" | "chalet";
 
 export interface Property {
   id: string | number;
@@ -12,10 +12,15 @@ export interface Property {
 }
 
 export interface Booking {
-  id: string | number;
-  propertyId: string | number;
+  id?: string | number;
   startDate: Date | string;
   endDate: Date | string;
   guestName: string;
   guestEmail: string;
 }
+
+export type FormState = {
+  status: "idle" | "pending" | "success" | "error";
+  errors: Record<string, string>;
+  data: Booking | null;
+};

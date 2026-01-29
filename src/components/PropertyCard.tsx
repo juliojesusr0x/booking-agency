@@ -1,5 +1,4 @@
-import React, { useCallback, memo } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { memo } from "react";
 import styled from "styled-components";
 import type { Property } from "@/types";
 
@@ -76,16 +75,6 @@ interface PropertyCardProps {
 }
 
 const PropertyCardComponent: React.FC<PropertyCardProps> = ({ property }) => {
-  const navigate = useNavigate();
-
-  // const handleClick = useCallback(() => {
-  //   const params = new URLSearchParams();
-  //   if (startDate) params.set('start', startDate);
-  //   if (endDate) params.set('end', endDate);
-  //   const query = params.toString();
-  //   navigate(`/property/${property.id}${query ? `?${query}` : ''}`);
-  // }, [navigate, property.id, startDate, endDate]);
-
   return (
     <Card>
       <Image
