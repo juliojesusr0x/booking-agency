@@ -1,0 +1,12 @@
+---
+description: Vitest and React Testing Library standards
+globs: "**/*.test.{ts,tsx}"
+alwaysApply: false
+---
+
+# Tests
+
+- Use Vitest with `@testing-library/react` and `@testing-library/user-event`.
+- Prefer `getByRole` and `getByLabelText` over `getByTestId` unless necessary.
+- Mock modules with `vi.mock()`; use `vi.importActual` when extending real modules.
+- Run `afterEach(cleanup)` from setup for isolation.

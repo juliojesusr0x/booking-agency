@@ -1,0 +1,10 @@
+---
+description: Git commit message style
+alwaysApply: true
+---
+
+# Commits
+
+- Use conventional prefixes: `feat:`, `fix:`, `refactor:`, `test:`, `chore:`, `docs:`.
+- One logical change per commit when possible.
+- Imperative mood: "add search filter" not "added" or "adds".

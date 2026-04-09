@@ -1,0 +1,12 @@
+---
+description: Tailwind CSS v4 styling conventions
+globs: "**/*.tsx"
+alwaysApply: false
+---
+
+# Tailwind CSS
+
+- Prefer Tailwind utility classes over inline styles and styled-components.
+- Mobile-first: add `sm:`, `md:`, `lg:` as needed.
+- Shared colors and radii belong in `src/index.css` via `@theme` when reused.
+- Order classes roughly: layout → spacing → typography → color → effects.
