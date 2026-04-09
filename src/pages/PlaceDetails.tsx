@@ -1,63 +1,13 @@
 import React, { useMemo, useState } from "react";
 import { useParams, useNavigate, useSearchParams } from "react-router-dom";
-import styled from "styled-components";
 import { useAppSelector, useAppDispatch } from "@/hooks/useAppDispatch";
 import { formatDateForInput, parseLocalDateString } from "@/utils/dateUtils";
 import { PropertyBookingCard } from "@/components/PropertyBookingCard";
 import { BookingForm } from "@/components/BookingForm";
 import { ErrorMessage } from "@/components/ErrorMessage";
 import { createBooking, updateBooking } from "@/store/bookings/BookingsSlice";
-
-const ContentContainer = styled.div`
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 2rem 1rem;
-`;
-
-const Content = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 2rem;
-
-  @media (max-width: 968px) {
-    grid-template-columns: 1fr;
-  }
-`;
-
-const BackButton = styled.button`
-  padding: 0.5rem 1rem;
-  background-color: #f3f4f6;
-  color: #374151;
-  border: 1px solid #d1d5db;
-  border-radius: 0.375rem;
-  font-weight: 500;
-  cursor: pointer;
-  margin-bottom: 1.5rem;
-  transition: background-color 0.2s;
-
-  &:hover {
-    background-color: #e5e7eb;
-  }
-`;
-
-const PropertySection = styled.div``;
-
-const BookingSection = styled.div`
-  background: white;
-  border: 1px solid #e5e7eb;
-  border-radius: 0.5rem;
-  padding: 1.5rem;
-  position: sticky;
-  top: 2rem;
-  height: fit-content;
-`;
-
-const BookingTitle = styled.h2`
-  font-size: 1.5rem;
-  font-weight: 600;
-  margin-bottom: 1.5rem;
-  color: #111827;
-`;
+import { createBookingId } from "@/utils/bookingId";
+import type { BookingFormValues } from "@/schemas/booking";
 
 type bookingStatus =
   | {
@@ -89,7 +39,9 @@ export const PlaceDetails: React.FC = () => {
 
   const property = properties.find((p) => p.id === Number(id));
   const isEditMode = !!bookingId;
-  const bookingData = bookings.find((b) => b.id === Number(bookingId));
+  const bookingData = bookings.find(
+    (b) => String(b.id) === String(bookingId),
+  );
 
   const [bookingStatus, setBookingStatus] = useState<bookingStatus>({
     status: "idle",
@@ -115,22 +67,19 @@ export const PlaceDetails: React.FC = () => {
     };
   }, [isEditMode, bookingData, searchParams]);
 
-  const handleSubmit = async (formData: {
-    startDate: string;
-    endDate: string;
-    guestName: string;
-    guestEmail: string;
-  }) => {
+  const handleSubmit = async (formData: BookingFormValues) => {
+    if (!property) return;
     try {
       setBookingStatus({ status: "pending", error: null });
 
       const start = parseLocalDateString(formData.startDate);
       const end = parseLocalDateString(formData.endDate);
 
-      if (isEditMode) {
+      if (isEditMode && bookingData) {
         dispatch(
           updateBooking({
-            id: property?.id,
+            id: bookingData.id,
+            propertyId: property.id,
             startDate: start,
             endDate: end,
             guestName: formData.guestName,
@@ -140,8 +89,8 @@ export const PlaceDetails: React.FC = () => {
       } else {
         dispatch(
           createBooking({
-            ...formData,
-            id: property?.id,
+            id: createBookingId(),
+            propertyId: property.id,
             guestName: formData.guestName,
             guestEmail: formData.guestEmail,
             startDate: start,
@@ -161,35 +110,45 @@ export const PlaceDetails: React.FC = () => {
 
   if (!property) {
     return (
-      <ContentContainer>
-        <BackButton onClick={() => navigate("/")}>← Back to Search</BackButton>
+      <div className="mx-auto max-w-6xl px-4 py-8">
+        <button
+          type="button"
+          onClick={() => navigate("/")}
+          className="mb-6 rounded-md border border-gray-300 bg-gray-100 px-4 py-2 font-medium text-gray-700 transition hover:bg-gray-200"
+        >
+          ← Back to Search
+        </button>
         <ErrorMessage message="Property not found" />
-      </ContentContainer>
+      </div>
     );
   }
 
   return (
-    <ContentContainer>
-      <BackButton onClick={() => navigate(isEditMode ? "/bookings" : "/")}>
+    <div className="mx-auto max-w-6xl px-4 py-8">
+      <button
+        type="button"
+        onClick={() => navigate(isEditMode ? "/bookings" : "/")}
+        className="mb-6 rounded-md border border-gray-300 bg-gray-100 px-4 py-2 font-medium text-gray-700 transition hover:bg-gray-200"
+      >
         ← Back {isEditMode ? "to Bookings" : "to Search"}
-      </BackButton>
+      </button>
 
-      <Content>
-        <PropertySection>
+      <div className="grid gap-8 lg:grid-cols-2">
+        <div>
           <PropertyBookingCard property={property} />
-        </PropertySection>
+        </div>
 
-        <BookingSection>
-          <BookingTitle>
+        <div className="sticky top-8 h-fit rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+          <h2 className="mb-6 text-xl font-semibold text-gray-900">
             {isEditMode ? "Update Booking" : "Book This Property"}
-          </BookingTitle>
+          </h2>
           {bookingStatus.status === "error" && (
             <ErrorMessage
               message={bookingStatus.error || "An error occurred"}
             />
           )}
           {bookingStatus.status === "success" && (
-            <div style={{ color: "#10b981", marginBottom: "1rem" }}>
+            <div className="mb-4 text-emerald-600">
               Booking {isEditMode ? "updated" : "created"} successfully!!
             </div>
           )}
@@ -199,8 +158,8 @@ export const PlaceDetails: React.FC = () => {
             onSubmit={handleSubmit}
             submitLabel={isEditMode ? "Update Booking" : "Save Booking"}
           />
-        </BookingSection>
-      </Content>
-    </ContentContainer>
+        </div>
+      </div>
+    </div>
   );
 };

@@ -1,91 +1,34 @@
 import type { Property } from "@/types";
-import styled from "styled-components";
-
-const ImageGallery = styled.div`
-  margin-bottom: 1.5rem;
-`;
-
-const MainImage = styled.img`
-  width: 100%;
-  height: 400px;
-  object-fit: cover;
-  border-radius: 0.5rem;
-  background-color: #f3f4f6;
-`;
-
-const Title = styled.h1`
-  font-size: 2rem;
-  font-weight: 700;
-  color: #111827;
-  margin-bottom: 0.5rem;
-`;
-
-const Address = styled.p`
-  font-size: 1rem;
-  color: #6b7280;
-  margin-bottom: 1rem;
-`;
-
-const InfoRow = styled.div`
-  display: flex;
-  gap: 1rem;
-  margin-bottom: 1rem;
-  align-items: center;
-`;
-
-const Type = styled.span`
-  padding: 0.25rem 0.75rem;
-  background-color: #f3f4f6;
-  color: #374151;
-  border-radius: 0.375rem;
-  font-size: 0.875rem;
-  text-transform: capitalize;
-`;
-
-const Price = styled.span`
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: #111827;
-`;
-
-const Rating = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
-  font-size: 1rem;
-  color: #6b7280;
-`;
-
-const Description = styled.p`
-  color: #374151;
-  line-height: 1.6;
-  margin-top: 1.5rem;
-`;
 
 export const PropertyBookingCard = ({ property }: { property: Property }) => {
   return (
     <>
-      <ImageGallery>
-        <MainImage
+      <div className="mb-6">
+        <img
           src={property.images[0] || "/assets/common/property-placeholder.svg"}
           alt={property.title}
+          className="h-80 w-full rounded-lg object-cover bg-gray-100"
           onError={(e) => {
             (e.target as HTMLImageElement).src =
               "/assets/common/property-placeholder.svg";
           }}
         />
-      </ImageGallery>
-      <Title>{property.title}</Title>
-      <Address>{property.address}</Address>
-      <InfoRow>
-        <Type>{property.type}</Type>
-        <Price>${property.price}/night</Price>
-        <Rating>
+      </div>
+      <h1 className="mb-2 text-3xl font-bold text-gray-900">{property.title}</h1>
+      <p className="mb-4 text-base text-gray-500">{property.address}</p>
+      <div className="mb-4 flex flex-wrap items-center gap-4">
+        <span className="rounded-md bg-gray-100 px-3 py-1 text-sm capitalize text-gray-700">
+          {property.type}
+        </span>
+        <span className="text-xl font-semibold text-gray-900">
+          ${property.price}/night
+        </span>
+        <div className="flex items-center gap-1 text-base text-gray-500">
           <span>⭐</span>
           <span>{property.rating.toFixed(1)}</span>
-        </Rating>
-      </InfoRow>
-      <Description>{property.description}</Description>
+        </div>
+      </div>
+      <p className="mt-6 leading-relaxed text-gray-700">{property.description}</p>
     </>
   );
 };

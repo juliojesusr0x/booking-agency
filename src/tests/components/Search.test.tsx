@@ -3,6 +3,7 @@ import { render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import userEvent from "@testing-library/user-event";
 import { Search } from "@/pages/Search";
+import type { RootState } from "@/store";
 
 type Property = {
   id: number;
@@ -24,12 +25,13 @@ let mockDispatch: ReturnType<typeof vi.fn>;
 
 vi.mock("@/hooks/useAppDispatch", async () => {
   const actual = await vi.importActual<typeof import("@/hooks/useAppDispatch")>(
-    "@/hooks/useAppDispatch",
+    "@/hooks/useAppDispatch"
   );
   return {
     ...actual,
     useAppDispatch: () => mockDispatch,
-    useAppSelector: (selector: (state: any) => any) => selector(mockState),
+    useAppSelector: <T,>(selector: (state: RootState) => T) =>
+      selector(mockState as unknown as RootState),
   };
 });
 
@@ -37,7 +39,7 @@ const renderWithRouter = () =>
   render(
     <MemoryRouter>
       <Search />
-    </MemoryRouter>,
+    </MemoryRouter>
   );
 
 describe("Search page", () => {
@@ -87,7 +89,7 @@ describe("Search page", () => {
     renderWithRouter();
 
     expect(
-      screen.getByRole("heading", { name: /search properties/i }),
+      screen.getByRole("heading", { name: /search properties/i })
     ).toBeInTheDocument();
     expect(screen.getByText(/cozy apartment downtown/i)).toBeInTheDocument();
     expect(screen.getByText(/modern house with garden/i)).toBeInTheDocument();
@@ -127,10 +129,10 @@ describe("Search page", () => {
 
     // wait for filtered result to appear to ensure state updates are flushed
     expect(
-      await screen.findByText(/cozy apartment downtown/i),
+      await screen.findByText(/cozy apartment downtown/i)
     ).toBeInTheDocument();
     expect(
-      screen.queryByText(/modern house with garden/i),
+      screen.queryByText(/modern house with garden/i)
     ).not.toBeInTheDocument();
   });
 
@@ -157,7 +159,7 @@ describe("Search page", () => {
 
     // wait for "No results" state to appear
     expect(
-      await screen.findByRole("heading", { name: /no results/i }),
+      await screen.findByRole("heading", { name: /no results/i })
     ).toBeInTheDocument();
   });
 });

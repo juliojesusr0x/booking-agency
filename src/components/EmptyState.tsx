@@ -1,39 +1,5 @@
 import React from "react";
-import styled from "styled-components";
-import { Link } from "react-router";
-
-const Container = styled.div`
-  text-align: center;
-  padding: 3rem 1rem;
-  color: #6b7280;
-`;
-
-const Title = styled.h2`
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: #111827;
-  margin-bottom: 0.5rem;
-`;
-
-const Message = styled.p`
-  font-size: 1rem;
-  margin-bottom: 1.5rem;
-`;
-
-const StyledLink = styled(Link)`
-  display: inline-block;
-  padding: 0.75rem 1.5rem;
-  background-color: #3b82f6;
-  color: white;
-  text-decoration: none;
-  border-radius: 0.375rem;
-  font-weight: 500;
-  transition: background-color 0.2s;
-
-  &:hover {
-    background-color: #2563eb;
-  }
-`;
+import { Link } from "react-router-dom";
 
 interface EmptyStateProps {
   title: string;
@@ -49,12 +15,17 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
   actionLink,
 }) => {
   return (
-    <Container>
-      <Title>{title}</Title>
-      <Message>{message}</Message>
+    <div className="px-4 py-12 text-center text-gray-500">
+      <h2 className="mb-2 text-2xl font-semibold text-gray-900">{title}</h2>
+      <p className="mb-6 text-base">{message}</p>
       {actionLabel && actionLink && (
-        <StyledLink to={actionLink}>{actionLabel}</StyledLink>
+        <Link
+          to={actionLink}
+          className="inline-block rounded-md bg-blue-600 px-6 py-3 font-medium text-white no-underline transition hover:bg-blue-700"
+        >
+          {actionLabel}
+        </Link>
       )}
-    </Container>
+    </div>
   );
 };

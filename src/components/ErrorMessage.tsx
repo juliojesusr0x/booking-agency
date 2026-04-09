@@ -1,30 +1,22 @@
-import React from 'react';
-import styled from 'styled-components';
-
-const ErrorContainer = styled.div`
-  padding: 0.75rem;
-  background-color: #fef2f2;
-  border: 1px solid #fecaca;
-  border-radius: 0.375rem;
-  color: #991b1b;
-  font-size: 0.875rem;
-  margin-top: 0.5rem;
-`;
+import React from "react";
 
 interface ErrorMessageProps {
   message: string;
-  'data-testid'?: string;
+  "data-testid"?: string;
 }
 
 export const ErrorMessage: React.FC<ErrorMessageProps> = ({
   message,
-  'data-testid': testId,
+  "data-testid": testId,
 }) => {
   if (!message) return null;
 
   return (
-    <ErrorContainer data-testid={testId}>
+    <div
+      data-testid={testId}
+      className="mt-2 rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-900"
+    >
       {message}
-    </ErrorContainer>
+    </div>
   );
 };

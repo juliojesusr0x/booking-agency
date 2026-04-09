@@ -1,29 +1,34 @@
 import type { Booking } from "@/types";
 import { parseLocalDateString } from "@/utils/dateUtils";
 
+function bookingDateToComparable(
+  value: Date | string,
+): ReturnType<typeof parseLocalDateString> {
+  if (typeof value === "string") {
+    return parseLocalDateString(value);
+  }
+  return parseLocalDateString(value.toISOString().slice(0, 10));
+}
+
 export const validateBookingOverlap = (
   bookings: Booking[],
   booking: Booking,
   excludeBookingId?: string | number,
 ) => {
-  const existingBookings = bookings.filter(
-    (bkng) => bkng.id === booking.id && bkng.id !== excludeBookingId,
+  const newStart = bookingDateToComparable(booking.startDate);
+  const newEnd = bookingDateToComparable(booking.endDate);
+
+  const sameProperty = bookings.filter(
+    (b) =>
+      String(b.propertyId) === String(booking.propertyId) &&
+      String(b.id) !== String(excludeBookingId),
   );
 
-  const overlap = existingBookings.some((bkng) => {
-    const bookingStart = parseLocalDateString(
-      typeof bkng.startDate === "string"
-        ? bkng.startDate
-        : bkng.startDate.toISOString().slice(0, 10),
-    );
-    const bookingEnd = parseLocalDateString(
-      typeof bkng.endDate === "string"
-        ? bkng.endDate
-        : bkng.endDate.toISOString().slice(0, 10),
-    );
+  const overlap = sameProperty.some((bkng) => {
+    const bookingStart = bookingDateToComparable(bkng.startDate);
+    const bookingEnd = bookingDateToComparable(bkng.endDate);
 
-    // Overlap condition: start1 <= end2 AND end1 >= start2
-    return booking.startDate <= bookingEnd && booking.endDate >= bookingStart;
+    return newStart <= bookingEnd && newEnd >= bookingStart;
   });
 
   if (overlap) {

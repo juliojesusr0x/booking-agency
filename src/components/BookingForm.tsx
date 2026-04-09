@@ -1,66 +1,13 @@
-import React, { useState } from "react";
-import styled from "styled-components";
+import React, { useEffect } from "react";
+import { Controller, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { DateInput } from "./DateInput";
 import { ErrorMessage } from "./ErrorMessage";
 import {
-  validateBookingForm,
-  type BookingFormData,
-  type BookingFormErrors,
-} from "@/utils/validation";
+  bookingFormSchema,
+  type BookingFormValues,
+} from "@/schemas/booking";
 import { getTodayString } from "@/utils/dateUtils";
-
-const Form = styled.form`
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-`;
-
-const FormGroup = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-`;
-
-const Label = styled.label`
-  font-weight: 500;
-  color: #374151;
-  font-size: 0.875rem;
-`;
-
-const Input = styled.input<{ $hasError?: boolean }>`
-  width: 100%;
-  padding: 0.75rem;
-  border: 1px solid ${(props) => (props.$hasError ? "#dc2626" : "#d1d5db")};
-  border-radius: 0.375rem;
-  font-size: 1rem;
-  background-color: white;
-  color: #111827;
-
-  &:focus {
-    outline: none;
-    border-color: ${(props) => (props.$hasError ? "#dc2626" : "#3b82f6")};
-    box-shadow: 0 0 0 3px
-      ${(props) =>
-        props.$hasError
-          ? "rgba(220, 38, 38, 0.15)"
-          : "rgba(59, 130, 246, 0.1)"};
-  }
-`;
-
-const Button = styled.button<{ disabled?: boolean }>`
-  padding: 0.75rem 1.5rem;
-  background-color: ${(props) => (props.disabled ? "#9ca3af" : "#3b82f6")};
-  color: white;
-  border: none;
-  border-radius: 0.375rem;
-  font-weight: 500;
-  cursor: ${(props) => (props.disabled ? "not-allowed" : "pointer")};
-  transition: background-color 0.2s;
-
-  &:hover:not(:disabled) {
-    background-color: #2563eb;
-  }
-`;
 
 interface BookingFormProps {
   initialData?: {
@@ -69,7 +16,7 @@ interface BookingFormProps {
     guestName?: string;
     guestEmail?: string;
   };
-  onSubmit: (data: BookingFormData) => void;
+  onSubmit: (data: BookingFormValues) => void;
   isLoading?: boolean;
   submitLabel?: string;
 }
@@ -80,117 +27,154 @@ export const BookingForm: React.FC<BookingFormProps> = ({
   isLoading = false,
   submitLabel = "Save Booking",
 }) => {
-  const [formData, setFormData] = useState<BookingFormData>({
-    startDate: initialData?.startDate || "",
-    endDate: initialData?.endDate || "",
-    guestName: initialData?.guestName || "",
-    guestEmail: initialData?.guestEmail || "",
+  const {
+    register,
+    control,
+    handleSubmit,
+    reset,
+    watch,
+    formState: { errors },
+  } = useForm<BookingFormValues>({
+    resolver: zodResolver(bookingFormSchema),
+    defaultValues: {
+      startDate: initialData?.startDate ?? "",
+      endDate: initialData?.endDate ?? "",
+      guestName: initialData?.guestName ?? "",
+      guestEmail: initialData?.guestEmail ?? "",
+    },
+    mode: "onSubmit",
   });
 
-  const [errors, setErrors] = useState<BookingFormErrors>({});
-  const [touched, setTouched] = useState<Record<string, boolean>>({});
-
-  const handleChange = (field: keyof BookingFormData, value: string) => {
-    setFormData((prev) => ({ ...prev, [field]: value }));
-    // Clear error when user starts typing
-    if (errors[field]) {
-      setErrors((prev) => ({ ...prev, [field]: undefined }));
-    }
-  };
-
-  const handleBlur = (field: keyof BookingFormData) => {
-    setTouched((prev) => ({ ...prev, [field]: true }));
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const validationErrors = validateBookingForm(formData);
-    setErrors(validationErrors);
-    setTouched({
-      startDate: true,
-      endDate: true,
-      guestName: true,
-      guestEmail: true,
-    });
-
-    if (Object.keys(validationErrors).length === 0) {
-      onSubmit(formData);
-    }
-  };
-
+  const startDateValue = watch("startDate");
   const today = getTodayString();
 
+  useEffect(() => {
+    reset({
+      startDate: initialData?.startDate ?? "",
+      endDate: initialData?.endDate ?? "",
+      guestName: initialData?.guestName ?? "",
+      guestEmail: initialData?.guestEmail ?? "",
+    });
+  }, [initialData, reset]);
+
   return (
-    <Form onSubmit={handleSubmit} noValidate data-testid="booking-form">
-      <FormGroup>
-        <Label htmlFor="startDate">Start Date *</Label>
-        <DateInput
-          id="startDate"
+    <form
+      onSubmit={handleSubmit((data) => {
+        onSubmit(data);
+      })}
+      noValidate
+      className="flex flex-col gap-6"
+      data-testid="booking-form"
+    >
+      <div className="flex flex-col gap-2">
+        <label
+          htmlFor="startDate"
+          className="text-sm font-medium text-gray-700"
+        >
+          Start Date *
+        </label>
+        <Controller
           name="startDate"
-          value={formData.startDate}
-          onChange={(value) => handleChange("startDate", value)}
-          min={today}
-          hasError={!!(touched.startDate && errors.startDate)}
-          data-testid="start-date-input"
+          control={control}
+          render={({ field }) => (
+            <DateInput
+              id="startDate"
+              name={field.name}
+              value={field.value}
+              onChange={field.onChange}
+              onBlur={field.onBlur}
+              min={today}
+              hasError={!!errors.startDate}
+              data-testid="start-date-input"
+            />
+          )}
         />
-        {touched.startDate && errors.startDate && (
-          <ErrorMessage message={errors.startDate} />
+        {errors.startDate && (
+          <ErrorMessage message={errors.startDate.message ?? ""} />
         )}
-      </FormGroup>
+      </div>
 
-      <FormGroup>
-        <Label htmlFor="endDate">End Date *</Label>
-        <DateInput
-          id="endDate"
+      <div className="flex flex-col gap-2">
+        <label htmlFor="endDate" className="text-sm font-medium text-gray-700">
+          End Date *
+        </label>
+        <Controller
           name="endDate"
-          value={formData.endDate}
-          onChange={(value) => handleChange("endDate", value)}
-          min={formData.startDate || today}
-          hasError={!!(touched.endDate && errors.endDate)}
-          data-testid="end-date-input"
+          control={control}
+          render={({ field }) => (
+            <DateInput
+              id="endDate"
+              name={field.name}
+              value={field.value}
+              onChange={field.onChange}
+              onBlur={field.onBlur}
+              min={startDateValue || today}
+              hasError={!!errors.endDate}
+              data-testid="end-date-input"
+            />
+          )}
         />
-        {touched.endDate && errors.endDate && (
-          <ErrorMessage message={errors.endDate} />
+        {errors.endDate && (
+          <ErrorMessage message={errors.endDate.message ?? ""} />
         )}
-      </FormGroup>
+      </div>
 
-      <FormGroup>
-        <Label htmlFor="guestName">Guest Name *</Label>
-        <Input
+      <div className="flex flex-col gap-2">
+        <label
+          htmlFor="guestName"
+          className="text-sm font-medium text-gray-700"
+        >
+          Guest Name *
+        </label>
+        <input
           id="guestName"
-          name="guestName"
           type="text"
-          value={formData.guestName}
-          onChange={(e) => handleChange("guestName", e.target.value)}
-          onBlur={() => handleBlur("guestName")}
-          $hasError={!!(touched.guestName && errors.guestName)}
+          autoComplete="name"
+          className={`w-full rounded-md border px-3 py-2.5 text-base text-gray-900 focus:outline-none focus:ring-2 ${
+            errors.guestName
+              ? "border-red-600 focus:border-red-600 focus:ring-red-500/20"
+              : "border-gray-300 focus:border-blue-500 focus:ring-blue-500/20"
+          }`}
           data-testid="guest-name-input"
+          {...register("guestName")}
         />
-        {touched.guestName && errors.guestName && (
-          <ErrorMessage message={errors.guestName} />
+        {errors.guestName && (
+          <ErrorMessage message={errors.guestName.message ?? ""} />
         )}
-      </FormGroup>
+      </div>
 
-      <FormGroup>
-        <Label htmlFor="guestEmail">Guest Email *</Label>
-        <Input
+      <div className="flex flex-col gap-2">
+        <label
+          htmlFor="guestEmail"
+          className="text-sm font-medium text-gray-700"
+        >
+          Guest Email *
+        </label>
+        <input
           id="guestEmail"
-          name="guestEmail"
           type="email"
-          value={formData.guestEmail}
-          onChange={(e) => handleChange("guestEmail", e.target.value)}
-          onBlur={() => handleBlur("guestEmail")}
-          $hasError={!!(touched.guestEmail && errors.guestEmail)}
+          autoComplete="email"
+          className={`w-full rounded-md border px-3 py-2.5 text-base text-gray-900 focus:outline-none focus:ring-2 ${
+            errors.guestEmail
+              ? "border-red-600 focus:border-red-600 focus:ring-red-500/20"
+              : "border-gray-300 focus:border-blue-500 focus:ring-blue-500/20"
+          }`}
           data-testid="guest-email-input"
+          {...register("guestEmail")}
         />
-        {touched.guestEmail && errors.guestEmail && (
-          <ErrorMessage message={errors.guestEmail} />
+        {errors.guestEmail && (
+          <ErrorMessage message={errors.guestEmail.message ?? ""} />
         )}
-      </FormGroup>
+      </div>
 
-      <Button type="submit" disabled={isLoading} data-testid="submit-button">
+      <button
+        type="submit"
+        disabled={isLoading}
+        data-testid="submit-button"
+        className="rounded-md bg-blue-600 px-6 py-3 font-medium text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-gray-400"
+      >
         {isLoading ? "Saving..." : submitLabel}
-      </Button>
-    </Form>
+      </button>
+    </form>
   );
 };

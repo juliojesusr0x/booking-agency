@@ -1,38 +1,15 @@
-import React from 'react';
-import styled from 'styled-components';
-
-const StyledInput = styled.input<{ $hasError?: boolean }>`
-  width: 100%;
-  padding: 0.75rem;
-  border: 1px solid ${(props) => (props.$hasError ? '#dc2626' : '#d1d5db')};
-  border-radius: 0.375rem;
-  font-size: 1rem;
-  background-color: white;
-  color: #111827;
-
-  &:focus {
-    outline: none;
-    border-color: ${(props) => (props.$hasError ? '#dc2626' : '#3b82f6')};
-    box-shadow: 0 0 0 3px
-      ${(props) =>
-        props.$hasError ? 'rgba(220, 38, 38, 0.15)' : 'rgba(59, 130, 246, 0.1)'};
-  }
-
-  &::-webkit-calendar-picker-indicator {
-    cursor: pointer;
-    filter: opacity(0.6);
-  }
-`;
+import React from "react";
 
 interface DateInputProps {
   id?: string;
   name?: string;
   value: string;
   onChange: (value: string) => void;
+  onBlur?: () => void;
   min?: string;
   max?: string;
   hasError?: boolean;
-  'data-testid'?: string;
+  "data-testid"?: string;
 }
 
 export const DateInput: React.FC<DateInputProps> = ({
@@ -40,23 +17,29 @@ export const DateInput: React.FC<DateInputProps> = ({
   name,
   value,
   onChange,
+  onBlur,
   min,
   max,
   hasError = false,
-  'data-testid': testId,
+  "data-testid": testId,
 }) => {
   return (
-    <StyledInput
+    <input
       id={id}
       type="date"
       name={name}
       value={value}
       onChange={(e) => onChange(e.target.value)}
+      onBlur={onBlur}
       min={min}
       max={max}
-      $hasError={hasError}
-      aria-invalid={hasError || false}
+      aria-invalid={hasError}
       data-testid={testId}
+      className={`w-full rounded-md border px-3 py-2.5 text-base text-gray-900 focus:outline-none focus:ring-2 [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:opacity-60 ${
+        hasError
+          ? "border-red-600 focus:border-red-600 focus:ring-red-500/20"
+          : "border-gray-300 focus:border-blue-500 focus:ring-blue-500/20"
+      }`}
     />
   );
 };

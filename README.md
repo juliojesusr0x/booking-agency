@@ -1,34 +1,35 @@
 # Booking Agency
 
-A React-based booking management application that allows users to create, read, update, and delete bookings for properties.
+A React app for browsing properties and managing stay bookings: search listings, book date ranges, edit or cancel reservations, with validation and duplicate-date prevention per property.
 
 ## Features
 
-- ✅ CRUD operations for bookings
-- ✅ Property search and listing
-- ✅ Date range selection
-- ✅ Overlap prevention for bookings
-- ✅ Responsive design (mobile, tablet, desktop)
-- ✅ Form validation
-- ✅ Error handling
+- Property search by title or address
+- Create, update, and delete bookings
+- Date range selection with overlap checks for the same property
+- Bookings persisted in the browser (`localStorage`)
+- Responsive layout
+- Form validation (Zod + React Hook Form)
+- Unit tests (Vitest, React Testing Library)
 
-## Tech Stack
+## Tech stack
 
-- **React 18** with TypeScript
-- **Vite** - Build tool
-- **React Router v6** - Routing
-- **Redux Toolkit** - State management
-- **Tailwind CSS** - Styling
-- **Styled Components** - Component styling
-- **Vitest** - Unit testing
+- **React 19** and **TypeScript**
+- **Vite** — build and dev server
+- **React Router 7** — routing
+- **Redux Toolkit** — app state
+- **Tailwind CSS v4** — styling
+- **React Hook Form** + **Zod** — forms and validation
+- **date-fns** — date parsing and formatting
+- **Vitest** — tests
 
-## Getting Started
+## Getting started
 
 ### Prerequisites
 
 - Node.js 18+ and npm
 
-### Installation
+### Install
 
 ```bash
 npm install
@@ -40,51 +41,57 @@ npm install
 npm run dev
 ```
 
-The app will be available at `http://localhost:5173`
+Open [http://localhost:5173](http://localhost:5173).
 
-### Build
+### Production build
 
 ```bash
 npm run build
-```
-
-### Preview Production Build
-
-```bash
 npm run preview
 ```
 
-## Testing
-
-### Unit Tests
+### Tests
 
 ```bash
 npm test
 ```
 
-## Project Structure
+## Deployment (Vercel)
+
+This is a single-page app. The repo includes `vercel.json` so client routes fall back to `index.html`.
+
+1. Import the repository in [Vercel](https://vercel.com).
+2. Framework: Vite (default). Build: `npm run build`. Output: `dist`.
+3. After deploy, add your production URL below.
+
+**Live demo:** _add your Vercel URL here_
+
+## Project layout
 
 ```
 src/
-├── db/           # fake initial db values
-├── store/        # Redux store and slices
-├── pages/        # Page components
-├── components/   # Reusable components
-├── hooks/        # Custom hooks
-├── utils/        # Utility functions
-├── types/        # TypeScript types
-└── tests/        # Test setup
+├── db/           # Seed property data
+├── store/        # Redux slices and persistence listener
+├── schemas/      # Zod schemas
+├── pages/        # Route-level views
+├── components/   # UI components
+├── hooks/        # Typed Redux hooks
+├── utils/        # Dates, storage helpers
+├── types/        # Shared TypeScript types
+└── tests/        # Vitest tests
 ```
 
-## Pages
+## Routes
 
-- **Homepage (Search)** - `/` - Search properties by date range
-- **Property Details** - `/property/:id` - View property and create booking
-- **Edit Booking** - `/property/:id/booking/:bookingId` - Edit existing booking
-- **My Bookings** - `/bookings` - View and manage all bookings
+| Path | Description |
+|------|-------------|
+| `/` | Search and list properties |
+| `/property/:id` | Property details and new booking |
+| `/property/:id/booking/:bookingId` | Edit booking |
+| `/bookings` | All bookings |
 
-## Notes
+## Behavior notes
 
-- All bookings are validated for overlaps
-- Dates cannot be in the past
-- At least 1 night stay is required
+- Bookings store a unique `id` and a `propertyId` linking to the listing.
+- Overlapping stays on the same property are rejected.
+- Start date cannot be in the past; at least one night is required.

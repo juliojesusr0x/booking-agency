@@ -3,19 +3,19 @@
 exports[`Navigation (snapshot) > matches snapshot on bookings route 1`] = `
 <div>
   <nav
-    class="sc-beySbL fThhDm"
+    class="sticky top-0 z-40 border-b border-gray-200 bg-white/90 px-4 py-4 backdrop-blur-sm sm:px-8"
   >
     <div
-      class="sc-guDLRU gkQOmv"
+      class="mx-auto flex max-w-6xl items-center justify-between"
     >
       <a
-        class="sc-dmyDGl dKDaA-D"
+        class="flex items-center gap-3 text-xl font-semibold text-blue-600 no-underline transition hover:text-blue-700"
         data-discover="true"
         href="/"
       >
         <img
           alt="Booking Agency"
-          class="sc-hLQRIK doKwqm"
+          class="h-8 w-auto"
           src="/logo.svg"
         />
         <span>
@@ -25,16 +25,18 @@ exports[`Navigation (snapshot) > matches snapshot on bookings route 1`] = `
       <button
         aria-expanded="false"
         aria-label="Toggle navigation menu"
-        class="sc-jTQDnk hCWSiv"
+        class="relative inline-flex md:hidden"
         type="button"
       >
-        <span />
+        <span
+          class="block h-0.5 w-6 rounded-full bg-gray-600 before:absolute before:left-0 before:top-[-6px] before:h-0.5 before:w-6 before:rounded-full before:bg-gray-600 before:content-[''] after:absolute after:left-0 after:top-[6px] after:h-0.5 after:w-6 after:rounded-full after:bg-gray-600 after:content-['']"
+        />
       </button>
       <div
-        class="sc-eDLJxb kxFASW"
+        class="hidden gap-8 md:flex md:items-center"
       >
         <a
-          class="sc-iBdmCa gpPvxT"
+          class="text-base font-medium border-b-2 pb-2 transition-colors no-underline border-transparent text-gray-500 hover:text-blue-600"
           data-discover="true"
           href="/"
         >
@@ -42,32 +44,13 @@ exports[`Navigation (snapshot) > matches snapshot on bookings route 1`] = `
         </a>
         <a
           aria-current="page"
-          class="sc-iBdmCa fnMdKv active"
+          class="text-base font-medium border-b-2 pb-2 transition-colors no-underline border-blue-600 text-blue-600"
           data-discover="true"
           href="/bookings"
         >
           My Bookings
         </a>
       </div>
-    </div>
-    <div
-      class="sc-gLLvbB dyxgAT"
-    >
-      <a
-        class="sc-iBdmCa gpPvxT"
-        data-discover="true"
-        href="/"
-      >
-        Search Properties
-      </a>
-      <a
-        aria-current="page"
-        class="sc-iBdmCa fnMdKv active"
-        data-discover="true"
-        href="/bookings"
-      >
-        My Bookings
-      </a>
     </div>
   </nav>
 </div>
@@ -76,19 +59,19 @@ exports[`Navigation (snapshot) > matches snapshot on bookings route 1`] = `
 exports[`Navigation (snapshot) > matches snapshot on homepage route 1`] = `
 <div>
   <nav
-    class="sc-beySbL fThhDm"
+    class="sticky top-0 z-40 border-b border-gray-200 bg-white/90 px-4 py-4 backdrop-blur-sm sm:px-8"
   >
     <div
-      class="sc-guDLRU gkQOmv"
+      class="mx-auto flex max-w-6xl items-center justify-between"
     >
       <a
-        class="sc-dmyDGl dKDaA-D"
+        class="flex items-center gap-3 text-xl font-semibold text-blue-600 no-underline transition hover:text-blue-700"
         data-discover="true"
         href="/"
       >
         <img
           alt="Booking Agency"
-          class="sc-hLQRIK doKwqm"
+          class="h-8 w-auto"
           src="/logo.svg"
         />
         <span>
@@ -98,49 +81,32 @@ exports[`Navigation (snapshot) > matches snapshot on homepage route 1`] = `
       <button
         aria-expanded="false"
         aria-label="Toggle navigation menu"
-        class="sc-jTQDnk hCWSiv"
+        class="relative inline-flex md:hidden"
         type="button"
       >
-        <span />
+        <span
+          class="block h-0.5 w-6 rounded-full bg-gray-600 before:absolute before:left-0 before:top-[-6px] before:h-0.5 before:w-6 before:rounded-full before:bg-gray-600 before:content-[''] after:absolute after:left-0 after:top-[6px] after:h-0.5 after:w-6 after:rounded-full after:bg-gray-600 after:content-['']"
+        />
       </button>
       <div
-        class="sc-eDLJxb kxFASW"
+        class="hidden gap-8 md:flex md:items-center"
       >
         <a
           aria-current="page"
-          class="sc-iBdmCa fnMdKv active"
+          class="text-base font-medium border-b-2 pb-2 transition-colors no-underline border-blue-600 text-blue-600"
           data-discover="true"
           href="/"
         >
           Search Properties
         </a>
         <a
-          class="sc-iBdmCa gpPvxT"
+          class="text-base font-medium border-b-2 pb-2 transition-colors no-underline border-transparent text-gray-500 hover:text-blue-600"
           data-discover="true"
           href="/bookings"
         >
           My Bookings
         </a>
       </div>
-    </div>
-    <div
-      class="sc-gLLvbB dyxgAT"
-    >
-      <a
-        aria-current="page"
-        class="sc-iBdmCa fnMdKv active"
-        data-discover="true"
-        href="/"
-      >
-        Search Properties
-      </a>
-      <a
-        class="sc-iBdmCa gpPvxT"
-        data-discover="true"
-        href="/bookings"
-      >
-        My Bookings
-      </a>
     </div>
   </nav>
 </div>

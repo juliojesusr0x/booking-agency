@@ -1,71 +1,4 @@
-import React from 'react';
-import styled from 'styled-components';
-
-const Overlay = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-`;
-
-const Dialog = styled.div`
-  background: white;
-  border-radius: 0.5rem;
-  padding: 1.5rem;
-  max-width: 400px;
-  width: 90%;
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
-`;
-
-const Title = styled.h3`
-  font-size: 1.25rem;
-  font-weight: 600;
-  margin-bottom: 0.75rem;
-  color: #111827;
-`;
-
-const Message = styled.p`
-  color: #6b7280;
-  margin-bottom: 1.5rem;
-`;
-
-const ButtonGroup = styled.div`
-  display: flex;
-  gap: 0.75rem;
-  justify-content: flex-end;
-`;
-
-const Button = styled.button<{ variant?: 'primary' | 'secondary' }>`
-  padding: 0.5rem 1rem;
-  border-radius: 0.375rem;
-  font-weight: 500;
-  cursor: pointer;
-  border: none;
-  transition: background-color 0.2s;
-
-  ${(props) =>
-    props.variant === 'primary'
-      ? `
-    background-color: #ef4444;
-    color: white;
-    &:hover {
-      background-color: #dc2626;
-    }
-  `
-      : `
-    background-color: #f3f4f6;
-    color: #374151;
-    &:hover {
-      background-color: #e5e7eb;
-    }
-  `}
-`;
+import React from "react";
 
 interface ConfirmDialogProps {
   isOpen: boolean;
@@ -81,27 +14,50 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
   isOpen,
   title,
   message,
-  confirmLabel = 'Confirm',
-  cancelLabel = 'Cancel',
+  confirmLabel = "Confirm",
+  cancelLabel = "Cancel",
   onConfirm,
   onCancel,
 }) => {
   if (!isOpen) return null;
 
   return (
-    <Overlay onClick={onCancel}>
-      <Dialog onClick={(e) => e.stopPropagation()}>
-        <Title>{title}</Title>
-        <Message>{message}</Message>
-        <ButtonGroup>
-          <Button variant="secondary" onClick={onCancel}>
+    <div
+      className="fixed inset-0 z-[1000] flex items-center justify-center bg-black/50 backdrop-blur-sm"
+      onClick={onCancel}
+      role="presentation"
+    >
+      <div
+        className="mx-4 w-full max-w-md rounded-lg bg-white p-6 shadow-xl"
+        onClick={(e) => e.stopPropagation()}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="confirm-dialog-title"
+      >
+        <h3
+          id="confirm-dialog-title"
+          className="mb-3 text-xl font-semibold text-gray-900"
+        >
+          {title}
+        </h3>
+        <p className="mb-6 text-gray-500">{message}</p>
+        <div className="flex justify-end gap-3">
+          <button
+            type="button"
+            onClick={onCancel}
+            className="rounded-md bg-gray-100 px-4 py-2 font-medium text-gray-700 transition hover:bg-gray-200"
+          >
             {cancelLabel}
-          </Button>
-          <Button variant="primary" onClick={onConfirm}>
+          </button>
+          <button
+            type="button"
+            onClick={onConfirm}
+            className="rounded-md bg-red-600 px-4 py-2 font-medium text-white transition hover:bg-red-700"
+          >
             {confirmLabel}
-          </Button>
-        </ButtonGroup>
-      </Dialog>
-    </Overlay>
+          </button>
+        </div>
+      </div>
+    </div>
   );
 };

@@ -5,29 +5,24 @@ import { Search } from "./pages/Search";
 import { PlaceDetails } from "./pages/PlaceDetails";
 import { MyBookings } from "./pages/MyBookings";
 import { NotFound } from "./pages/NotFound";
-import styled from "styled-components";
 import initialDb from "./db/initialDb";
 import { setProperties } from "./store/properties/PropertySlice";
-import type { Property, Booking } from "./types";
+import type { Property } from "./types";
 import { setBookings } from "./store/bookings/BookingsSlice";
 import { useAppDispatch } from "./hooks/useAppDispatch";
-
-const AppContainer = styled.div`
-  min-height: 100vh;
-  background-color: #f9fafb;
-`;
+import { loadBookings } from "./utils/storage";
 
 const App: React.FC = () => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     dispatch(setProperties(initialDb.properties as Property[]));
-    dispatch(setBookings(initialDb.bookings as Booking[]));
+    dispatch(setBookings(loadBookings()));
   }, [dispatch]);
 
   return (
     <BrowserRouter>
-      <AppContainer>
+      <div className="min-h-screen bg-gray-50">
         <Navigation />
         <Routes>
           <Route path="/" element={<Search />} />
@@ -39,7 +34,7 @@ const App: React.FC = () => {
           <Route path="/bookings" element={<MyBookings />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
-      </AppContainer>
+      </div>
     </BrowserRouter>
   );
 };

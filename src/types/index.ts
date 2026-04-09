@@ -12,7 +12,10 @@ export interface Property {
 }
 
 export interface Booking {
-  id?: string | number;
+  /** Unique booking record id */
+  id: string | number;
+  /** Property this booking is for */
+  propertyId: string | number;
   startDate: Date | string;
   endDate: Date | string;
   guestName: string;

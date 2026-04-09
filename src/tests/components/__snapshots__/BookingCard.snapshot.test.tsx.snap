@@ -3,29 +3,29 @@
 exports[`BookingCard (snapshot) > matches snapshot for a sample booking 1`] = `
 <div>
   <div
-    class="sc-beySbL eLxIX"
+    class="h-fit rounded-lg border border-gray-200 bg-white p-6 shadow-sm transition hover:shadow-md"
     data-testid="booking-card-10"
   >
     <div
-      class="sc-guDLRU hIDheN"
+      class="mb-4 flex items-start justify-between"
     >
       <div
-        class="sc-dmyDGl bksOVr"
+        class="flex-1"
       >
         <h3
-          class="sc-hLQRIK iuIgfJ"
+          class="mb-1 text-lg font-semibold text-gray-900"
         >
           Cozy Apartment Downtown
         </h3>
         <span
-          class="sc-eDLJxb usymJ"
+          class="text-sm capitalize text-gray-500"
         >
           apartment
         </span>
       </div>
     </div>
     <div
-      class="sc-jTQDnk kgBzCr"
+      class="my-4 text-sm text-gray-700"
     >
       <strong>
         Dates:
@@ -34,7 +34,7 @@ exports[`BookingCard (snapshot) > matches snapshot for a sample booking 1`] = `
       Jan 9, 2025 - Jan 11, 2025
     </div>
     <div
-      class="sc-gLLvbB bcChzU"
+      class="my-4 text-sm text-gray-500"
     >
       <div>
         <strong>
@@ -52,17 +52,17 @@ exports[`BookingCard (snapshot) > matches snapshot for a sample booking 1`] = `
       </div>
     </div>
     <div
-      class="sc-iBdmCa eKlbkY"
+      class="mt-4 flex gap-3"
     >
       <button
-        class="sc-fsYeqr hKyOnZ"
-        variant="primary"
+        class="rounded-md border border-blue-600 bg-blue-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-blue-700"
+        type="button"
       >
         Edit
       </button>
       <button
-        class="sc-fsYeqr bzVIiG"
-        variant="danger"
+        class="rounded-md border border-red-500 bg-white px-4 py-2 text-sm font-medium text-red-600 transition hover:bg-red-50"
+        type="button"
       >
         Delete
       </button>

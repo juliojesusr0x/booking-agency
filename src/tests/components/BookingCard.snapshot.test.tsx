@@ -5,6 +5,7 @@ import type { Booking } from "@/types";
 
 const sampleBooking: Booking = {
   id: 10,
+  propertyId: 1,
   startDate: new Date("2025-01-10"),
   endDate: new Date("2025-01-12"),
   guestName: "John Doe",

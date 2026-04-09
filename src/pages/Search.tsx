@@ -1,60 +1,9 @@
 import React, { useMemo, useState } from "react";
-import styled from "styled-components";
 import { PropertyCard } from "@/components/PropertyCard";
 import type { Property } from "@/types";
 import { EmptyState } from "@/components/EmptyState";
 import { Link } from "react-router-dom";
 import { useAppSelector } from "@/hooks/useAppDispatch";
-
-const SearchContainer = styled.div`
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 2rem 1rem;
-`;
-
-const SearchBox = styled.div`
-  background: white;
-  border: 1px solid #e5e7eb;
-  border-radius: 0.5rem;
-  padding: 1.5rem;
-  margin-bottom: 2rem;
-`;
-
-const SearchTitle = styled.h2`
-  font-size: 1.5rem;
-  font-weight: 600;
-  margin-bottom: 1rem;
-  color: #111827;
-`;
-
-const SearchInputBox = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-`;
-
-const SearchInputLabel = styled.label`
-  font-weight: 500;
-  color: #374151;
-  font-size: 0.875rem;
-`;
-
-const SearchInput = styled.input`
-  padding: 0.75rem 1rem;
-  border: 1px solid #e5e7eb;
-  border-radius: 0.375rem;
-  font-size: 1rem;
-`;
-
-const PropertiesGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 1.5rem;
-
-  @media (max-width: 640px) {
-    grid-template-columns: 1fr;
-  }
-`;
 
 export const Search: React.FC = () => {
   const { properties } = useAppSelector((state) => state.properties);
@@ -72,23 +21,31 @@ export const Search: React.FC = () => {
   }, [properties, searchValue]);
 
   return (
-    <SearchContainer>
-      <SearchBox>
-        <SearchTitle>Search Properties</SearchTitle>
+    <div className="mx-auto max-w-6xl px-4 py-8">
+      <div className="mb-8 rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+        <h2 className="mb-4 text-2xl font-semibold text-gray-900">
+          Search Properties
+        </h2>
         <form>
-          <SearchInputBox>
-            <SearchInputLabel htmlFor="place">Place name</SearchInputLabel>
-            <SearchInput
+          <div className="flex flex-col gap-2">
+            <label
+              htmlFor="place"
+              className="text-sm font-medium text-gray-700"
+            >
+              Place name
+            </label>
+            <input
               type="text"
               value={searchValue}
               onChange={(e) => setSearchValue(e.target.value)}
               name="place"
               id="place"
               placeholder="Search by property name or address..."
+              className="rounded-md border border-gray-200 px-4 py-3 text-base text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
             />
-          </SearchInputBox>
+          </div>
         </form>
-      </SearchBox>
+      </div>
 
       {properties.length === 0 ? (
         <EmptyState
@@ -101,14 +58,18 @@ export const Search: React.FC = () => {
           message={`No properties match "${searchValue}". Try a different search.`}
         />
       ) : (
-        <PropertiesGrid>
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-[repeat(auto-fill,minmax(280px,1fr))]">
           {filteredProperties.map((property: Property) => (
-            <Link to={`/property/${property.id}`} key={property.id}>
+            <Link
+              to={`/property/${property.id}`}
+              key={property.id}
+              className="block no-underline"
+            >
               <PropertyCard property={property} />
             </Link>
           ))}
-        </PropertiesGrid>
+        </div>
       )}
-    </SearchContainer>
+    </div>
   );
 };

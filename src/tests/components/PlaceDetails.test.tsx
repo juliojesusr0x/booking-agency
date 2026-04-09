@@ -3,6 +3,7 @@ import { MemoryRouter, Routes, Route } from "react-router-dom";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { PlaceDetails } from "@/pages/PlaceDetails";
+import type { RootState } from "@/store";
 
 // Mock date functions to control "today" for validation
 vi.mock("@/utils/dateUtils", async () => {
@@ -31,6 +32,7 @@ type Property = {
 
 type Booking = {
   id: number;
+  propertyId: number;
   startDate: string;
   endDate: string;
   guestName: string;
@@ -55,7 +57,8 @@ vi.mock("@/hooks/useAppDispatch", async () => {
   return {
     ...actual,
     useAppDispatch: () => mockDispatch,
-    useAppSelector: (selector: (state: any) => any) => selector(mockState),
+    useAppSelector: <T,>(selector: (state: RootState) => T) =>
+      selector(mockState as unknown as RootState),
   };
 });
 
@@ -137,6 +140,7 @@ describe("PlaceDetails page", () => {
     mockState.bookings.bookings = [
       {
         id: 10,
+        propertyId: 1,
         startDate: "2025-01-10",
         endDate: "2025-01-12",
         guestName: "John Doe",
@@ -182,6 +186,7 @@ describe("PlaceDetails page", () => {
     mockState.bookings.bookings = [
       {
         id: 10,
+        propertyId: 1,
         startDate: "2025-01-10",
         endDate: "2025-01-12",
         guestName: "John Doe",

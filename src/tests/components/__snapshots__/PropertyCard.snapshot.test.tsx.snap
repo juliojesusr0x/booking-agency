@@ -3,36 +3,36 @@
 exports[`PropertyCard (snapshot) > matches snapshot for a sample property 1`] = `
 <div>
   <div
-    class="sc-beySbL cQfugI"
+    class="h-full cursor-pointer overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
   >
     <img
       alt="Cozy Apartment Downtown"
-      class="sc-guDLRU jiqGjT"
+      class="h-48 w-full object-cover bg-gray-100"
       src="https://example.com/image.jpg"
     />
     <div
-      class="sc-dmyDGl ieicqb"
+      class="p-4"
     >
       <h3
-        class="sc-hLQRIK cfJBLb"
+        class="mb-2 text-lg font-semibold text-gray-900"
       >
         Cozy Apartment Downtown
       </h3>
       <p
-        class="sc-eDLJxb cemwtL"
+        class="mb-3 text-sm text-gray-500"
       >
         123 Main St, City
       </p>
       <div
-        class="sc-jTQDnk htbHhj"
+        class="mb-2 flex items-center justify-between"
       >
         <span
-          class="sc-gLLvbB cFeZFJ"
+          class="text-sm capitalize text-gray-500"
         >
           apartment
         </span>
         <span
-          class="sc-iBdmCa jhdKrA"
+          class="text-base font-semibold text-gray-900"
         >
           $
           150
@@ -40,7 +40,7 @@ exports[`PropertyCard (snapshot) > matches snapshot for a sample property 1`] = 
         </span>
       </div>
       <div
-        class="sc-fsYeqr geJKVT"
+        class="flex items-center gap-1 text-sm text-gray-500"
       >
         <span>
           ⭐

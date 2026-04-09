@@ -1,49 +1,10 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import styled from "styled-components";
 import { useAppDispatch, useAppSelector } from "@/hooks/useAppDispatch";
 import { BookingCard } from "@/components/BookingCard";
 import { EmptyState } from "@/components/EmptyState";
 import { ConfirmDialog } from "@/components/ConfirmDialog";
-import { setBookings } from "@/store/bookings/BookingsSlice";
-import { setProperties } from "@/store/properties/PropertySlice";
 import { deleteBooking } from "@/store/bookings/BookingsSlice";
-
-const Container = styled.div`
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 2rem 1rem;
-`;
-
-const Title = styled.h1`
-  font-size: 2rem;
-  font-weight: 700;
-  color: #111827;
-  margin-bottom: 2rem;
-`;
-
-const SuccessMessage = styled.div`
-  padding: 0.75rem;
-  background-color: #d1fae5;
-  border: 1px solid #a7f3d0;
-  border-radius: 0.375rem;
-  color: #065f46;
-  margin-bottom: 1rem;
-`;
-
-const BookingsGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1.5rem;
-
-  @media (max-width: 1024px) {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  @media (max-width: 640px) {
-    grid-template-columns: 1fr;
-  }
-`;
 
 export const MyBookings: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -57,16 +18,11 @@ export const MyBookings: React.FC = () => {
   >(null);
   const [successMessage, setSuccessMessage] = useState("");
 
-  useEffect(() => {
-    dispatch(setBookings(bookings));
-    dispatch(setProperties(properties));
-  }, [dispatch, bookings, properties]);
-
   const handleEdit = useCallback(
     (bookingId: string | number) => {
       const booking = bookings.find((b) => b.id === bookingId);
       if (booking) {
-        navigate(`/property/${booking.id}/booking/${bookingId}`);
+        navigate(`/property/${booking.propertyId}/booking/${bookingId}`);
       }
     },
     [bookings, navigate],
@@ -84,11 +40,9 @@ export const MyBookings: React.FC = () => {
         setSuccessMessage("Booking deleted successfully!");
         setDeleteDialogOpen(false);
         setBookingToDeleteId(null);
-        // Clear success message after 3 seconds
         setTimeout(() => setSuccessMessage(""), 3000);
       } catch (error) {
         console.error(error);
-        // Error is handled by Redux state
         setDeleteDialogOpen(false);
         setBookingToDeleteId(null);
       }
@@ -101,10 +55,17 @@ export const MyBookings: React.FC = () => {
   }, []);
 
   return (
-    <Container>
-      <Title>My Bookings</Title>
+    <div className="mx-auto max-w-6xl px-4 py-8">
+      <h1 className="mb-8 text-3xl font-bold text-gray-900">My Bookings</h1>
 
-      {successMessage && <SuccessMessage>{successMessage}</SuccessMessage>}
+      {successMessage && (
+        <div
+          className="mb-4 rounded-md border border-emerald-200 bg-emerald-50 px-3 py-2 text-emerald-900"
+          role="status"
+        >
+          {successMessage}
+        </div>
+      )}
 
       {bookings.length === 0 ? (
         <EmptyState
@@ -114,10 +75,10 @@ export const MyBookings: React.FC = () => {
           actionLink="/"
         />
       ) : (
-        <BookingsGrid>
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
           {bookings.map((booking) => {
             const property = properties.find(
-              (p) => Number(p.id) === Number(booking.id),
+              (p) => String(p.id) === String(booking.propertyId),
             );
             return (
               <BookingCard
@@ -130,7 +91,7 @@ export const MyBookings: React.FC = () => {
               />
             );
           })}
-        </BookingsGrid>
+        </div>
       )}
 
       <ConfirmDialog
@@ -142,6 +103,6 @@ export const MyBookings: React.FC = () => {
         onConfirm={handleDeleteConfirm}
         onCancel={handleDeleteCancel}
       />
-    </Container>
+    </div>
   );
 };

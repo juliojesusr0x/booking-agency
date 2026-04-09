@@ -1,11 +1,16 @@
+import {
+  format,
+  isBefore,
+  parse,
+  startOfDay,
+} from "date-fns";
+
 /**
  * Parse YYYY-MM-DD (or ISO string) as local date (avoids UTC-midnight off-by-one)
  */
 export function parseLocalDateString(isoDate: string): Date {
   const datePart = isoDate.slice(0, 10);
-  // if (!/^\d{4}-\d{2}-\d{2}$/.test(datePart)) return new Date(isoDate);
-  const [y, m, d] = datePart.split("-").map(Number);
-  return new Date(y, m - 1, d);
+  return parse(datePart, "yyyy-MM-dd", new Date());
 }
 
 /**
@@ -16,10 +21,7 @@ export function formatDateForInput(date: Date | string): string {
     return date;
   }
   const d = typeof date === "string" ? parseLocalDateString(date) : date;
-  const year = d.getFullYear();
-  const month = String(d.getMonth() + 1).padStart(2, "0");
-  const day = String(d.getDate()).padStart(2, "0");
-  return `${year}-${month}-${day}`;
+  return format(d, "yyyy-MM-dd");
 }
 
 /**
@@ -27,11 +29,7 @@ export function formatDateForInput(date: Date | string): string {
  */
 export function formatDateForDisplay(date: Date | string): string {
   const d = typeof date === "string" ? parseLocalDateString(date) : date;
-  return d.toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-  });
+  return format(d, "MMM d, yyyy");
 }
 
 /**
@@ -50,7 +48,7 @@ export function formatDateRange(
  * Get today's date as YYYY-MM-DD string
  */
 export function getTodayString(): string {
-  return formatDateForInput(new Date());
+  return format(new Date(), "yyyy-MM-dd");
 }
 
 /**
@@ -58,11 +56,7 @@ export function getTodayString(): string {
  */
 export function isPastDate(date: Date | string): boolean {
   const d = typeof date === "string" ? parseLocalDateString(date) : date;
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  const dNorm = new Date(d);
-  dNorm.setHours(0, 0, 0, 0);
-  return dNorm < today;
+  return isBefore(startOfDay(d), startOfDay(new Date()));
 }
 
 /**
@@ -74,5 +68,5 @@ export function isValidDateRange(
 ): boolean {
   const parse = (x: Date | string) =>
     typeof x === "string" ? parseLocalDateString(x) : x;
-  return parse(startDate) < parse(endDate);
+  return isBefore(parse(startDate), parse(endDate));
 }

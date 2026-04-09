@@ -1,165 +1,64 @@
 import React, { useState } from "react";
-import { Link, NavLink, useLocation } from "react-router-dom";
-import styled from "styled-components";
+import { Link, NavLink } from "react-router-dom";
 
-const Nav = styled.nav`
-  background-color: white;
-  border-bottom: 1px solid #e5e7eb;
-  padding: 1rem 2rem;
-`;
-
-const NavContainer = styled.div`
-  max-width: 1200px;
-  margin: 0 auto;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-`;
-
-const LogoLink = styled(Link)`
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  text-decoration: none;
-  color: #3b82f6;
-  font-size: 1.5rem;
-  font-weight: 600;
-  transition: color 0.2s;
-
-  &:hover {
-    color: #2563eb;
-  }
-`;
-
-const LogoImage = styled.img`
-  height: 2rem;
-  width: auto;
-  display: block;
-`;
-
-const NavLinks = styled.div`
-  display: flex;
-  gap: 2rem;
-  align-items: center;
-
-  /* Hide desktop links on small screens */
-  @media (max-width: 640px) {
-    display: none;
-  }
-`;
-
-const MobileMenuButton = styled.button`
-  display: none;
-  background: none;
-  border: none;
-  padding: 0.25rem;
-  margin-left: 1rem;
-  cursor: pointer;
-
-  @media (max-width: 640px) {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  span {
-    display: block;
-    width: 1.5rem;
-    height: 0.125rem;
-    background-color: #4b5563;
-    border-radius: 9999px;
-    position: relative;
-  }
-
-  span::before,
-  span::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    width: 1.5rem;
-    height: 0.125rem;
-    background-color: #4b5563;
-    border-radius: 9999px;
-  }
-
-  span::before {
-    top: -0.35rem;
-  }
-
-  span::after {
-    top: 0.35rem;
-  }
-`;
-
-const MobileNavLinks = styled.div<{ $open: boolean }>`
-  display: none;
-
-  @media (max-width: 640px) {
-    display: ${(props) => (props.$open ? "flex" : "none")};
-    flex-direction: column;
-    gap: 0.75rem;
-    margin-top: 0.75rem;
-  }
-`;
-
-const StyledLink = styled(NavLink)<{ $active: boolean }>`
-  text-decoration: none;
-  font-weight: 500;
-  color: ${(props) => (props.$active ? "#3b82f6" : "#6b7280")};
-  padding: 0.5rem 0;
-  border-bottom: 2px solid
-    ${(props) => (props.$active ? "#3b82f6" : "transparent")};
-  transition: color 0.2s;
-
-  &:hover {
-    color: #3b82f6;
-  }
-`;
+const navLinkClass = ({ isActive }: { isActive: boolean }) =>
+  [
+    "text-base font-medium border-b-2 pb-2 transition-colors no-underline",
+    isActive
+      ? "border-blue-600 text-blue-600"
+      : "border-transparent text-gray-500 hover:text-blue-600",
+  ].join(" ");
 
 export const Navigation: React.FC = () => {
-  const { pathname } = useLocation();
   const [isMobileOpen, setIsMobileOpen] = useState(false);
 
   return (
-    <Nav>
-      <NavContainer>
-        <LogoLink to="/">
-          <LogoImage src="/logo.svg" alt="Booking Agency" />
+    <nav className="sticky top-0 z-40 border-b border-gray-200 bg-white/90 px-4 py-4 backdrop-blur-sm sm:px-8">
+      <div className="mx-auto flex max-w-6xl items-center justify-between">
+        <Link
+          to="/"
+          className="flex items-center gap-3 text-xl font-semibold text-blue-600 no-underline transition hover:text-blue-700"
+        >
+          <img src="/logo.svg" alt="Booking Agency" className="h-8 w-auto" />
           <span>Booking Agency</span>
-        </LogoLink>
-        <MobileMenuButton
+        </Link>
+        <button
           type="button"
           aria-label="Toggle navigation menu"
           aria-expanded={isMobileOpen}
           onClick={() => setIsMobileOpen((open) => !open)}
+          className="relative inline-flex md:hidden"
         >
-          <span />
-        </MobileMenuButton>
-        <NavLinks>
-          <StyledLink to="/" $active={pathname === "/"}>
+          <span className="block h-0.5 w-6 rounded-full bg-gray-600 before:absolute before:left-0 before:top-[-6px] before:h-0.5 before:w-6 before:rounded-full before:bg-gray-600 before:content-[''] after:absolute after:left-0 after:top-[6px] after:h-0.5 after:w-6 after:rounded-full after:bg-gray-600 after:content-['']" />
+        </button>
+        <div className="hidden gap-8 md:flex md:items-center">
+          <NavLink to="/" className={navLinkClass} end>
             Search Properties
-          </StyledLink>
-          <StyledLink to="/bookings" $active={pathname === "/bookings"}>
+          </NavLink>
+          <NavLink to="/bookings" className={navLinkClass}>
             My Bookings
-          </StyledLink>
-        </NavLinks>
-      </NavContainer>
-      <MobileNavLinks $open={isMobileOpen}>
-        <StyledLink
-          to="/"
-          $active={pathname === "/"}
-          onClick={() => setIsMobileOpen(false)}
-        >
-          Search Properties
-        </StyledLink>
-        <StyledLink
-          to="/bookings"
-          $active={pathname === "/bookings"}
-          onClick={() => setIsMobileOpen(false)}
-        >
-          My Bookings
-        </StyledLink>
-      </MobileNavLinks>
-    </Nav>
+          </NavLink>
+        </div>
+      </div>
+      {isMobileOpen && (
+        <div className="mx-auto mt-3 flex max-w-6xl flex-col gap-3 border-t border-gray-100 pt-3 md:hidden">
+          <NavLink
+            to="/"
+            className={navLinkClass}
+            onClick={() => setIsMobileOpen(false)}
+            end
+          >
+            Search Properties
+          </NavLink>
+          <NavLink
+            to="/bookings"
+            className={navLinkClass}
+            onClick={() => setIsMobileOpen(false)}
+          >
+            My Bookings
+          </NavLink>
+        </div>
+      )}
+    </nav>
   );
 };
